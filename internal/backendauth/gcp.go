@@ -54,6 +54,7 @@ func newGCPHandler(ctx context.Context, gcpAuth *filterapi.GCPAuth) (filterapi.B
 		// watcher cancels the load's context as soon as the load returns, and
 		// external_account credentials would then fail every exchange with
 		// "context canceled".
+		// NOTE: this also detaches credential discovery below from the watcher's per-tick deadline
 		ctx = context.WithValue(context.WithoutCancel(ctx), oauth2.HTTPClient, gcpHTTPClient)
 		creds, err := google.FindDefaultCredentials(ctx, "https://www.googleapis.com/auth/cloud-platform")
 		if err != nil {
